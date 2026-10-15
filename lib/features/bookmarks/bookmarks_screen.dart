@@ -205,7 +205,7 @@ class BookmarksScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Sunan Ibn Majah',
+                            'Sunan Abu Dawood',
                           style: TextStyle(fontSize: 11, color: isDark ? Colors.white60 : Colors.grey.shade500, fontStyle: FontStyle.italic),
                         ),
                       ],
@@ -220,3 +220,4 @@ class BookmarksScreen extends ConsumerWidget {
     );
   }
 }
+

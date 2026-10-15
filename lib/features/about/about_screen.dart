@@ -54,16 +54,16 @@ class AboutScreen extends StatelessWidget {
                     ),
                     child: ClipOval(
                       child: Image.asset(
-                        'assets/icon/icon.png',
+                        'assets/icon/icon_circle.png',
                         width: 110,
                         height: 110,
-                        fit: BoxFit.contain, // Changed to contain for perfect fit
+                        fit: BoxFit.cover, // Full fit in circle
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'سنن ابن ماجہ',
+                    'سنن ابی داؤد',
                     style: GoogleFonts.amiri(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Sunan Ibn Majah',
+                    'Sunan Abu Dawood',
                     style: GoogleFonts.rubik(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -90,28 +90,28 @@ class AboutScreen extends StatelessWidget {
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.05, end: 0),
             const SizedBox(height: 16),
 
-            // About Sunan Ibn Majah
-            _buildCard(context, isDark, 'About Sunan Ibn Majah', Icons.info_outline, [
-              'Sunan Ibn Majah is a collection of hadith compiled by Imam Ibn Majah (rahimahullah) in the 9th century.',
-              'It is widely considered to be the sixth of the six major collections of hadith (Kutub al-Sittah).',
-              'It consists of over 4,000 ahadith divided into 32 books.',
-              'The collection is highly regarded for its comprehensive coverage of Fiqh (jurisprudence) topics.',
+            // About Sunan Abu Dawood
+            _buildCard(context, isDark, 'About Sunan Abu Dawood', Icons.info_outline, [
+              'Sunan Abu Dawood is a collection of hadith compiled by Imam Abu Dawood (rahimahullah) in the 9th century.',
+              'It is widely considered to be one of the six major collections of hadith (Kutub al-Sittah).',
+              'It consists of over 5,000 ahadith divided into various books of jurisprudence.',
+              'The collection is highly regarded for its focus on ahadith regarding legal rulings (Ahkam).',
             ], 0),
             const SizedBox(height: 12),
 
             // About Author
-            _buildCard(context, isDark, 'About Imam Ibn Majah', Icons.person_outline, [
-              'Full Name: Abu Abdullah Muhammad ibn Yazid Ibn Majah al-Rabai al-Qazwini',
-              'Born: 824 CE (209 AH) in Qazvin, present-day Iran',
-              'Died: 887 CE (273 AH) in Qazvin',
-              'He traveled widely across the Islamic world to Iraq, Hejaz, Syria, and Egypt to gather hadiths.',
-              'He was a prominent student of many great scholars of his time and a renowned traditionalist.',
+            _buildCard(context, isDark, 'About Imam Abu Dawood', Icons.person_outline, [
+              'Full Name: Abu Dawood Sulayman ibn al-Ash\'ath al-Sijistani',
+              'Born: 817 CE (202 AH) in Sijistan',
+              'Died: 889 CE (275 AH) in Basra, Iraq',
+              'He spent 20 years traveling across the Islamic world to collect authentic traditions.',
+              'Out of 500,000 collected hadiths, he selected 5,274 for this masterpiece.',
             ], 1),
             const SizedBox(height: 12),
 
             // App Features
             _buildCard(context, isDark, 'App Features', Icons.star_outline, [
-              '• Complete Sunan Ibn Majah collection',
+              '• Complete Sunan Abu Dawood collection',
               '• Arabic, Urdu & English translations',
               '• Bookmark your favourite hadiths',
               '• Create custom collections',

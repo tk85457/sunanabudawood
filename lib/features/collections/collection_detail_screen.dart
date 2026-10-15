@@ -164,7 +164,7 @@ class CollectionDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Sunan Ibn Majah',
+                        'Sunan Abu Dawood',
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.grey.shade500,
@@ -182,3 +182,4 @@ class CollectionDetailScreen extends ConsumerWidget {
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +11,18 @@ import 'core/router.dart';
 import 'features/settings/settings_provider.dart';
 import 'data/isar/isar_service.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
 
-  // Initialize sqflite for web or desktop
+  // Cheap, synchronous factory wiring for web/desktop — no I/O, safe to run
+  // before the first frame.
   if (kIsWeb) {
     databaseFactory = databaseFactoryFfiWeb;
   } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -21,25 +30,64 @@ void main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
-  final prefs = await SharedPreferences.getInstance();
-
-  // Initialize Isar in background on non-web platforms
+  // Isar init already runs fire-and-forget (not awaited) so it never blocked
+  // the first frame — kept as-is, just moved after the runApp() call below
+  // for clarity of ordering.
   if (!kIsWeb) {
     IsarService.instance.init();
   }
 
-  runApp(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(prefs),
-      ],
-      child: const SunanIbnMajahApp(),
-    ),
-  );
+  // COLD START FIX: previously main() awaited SharedPreferences.getInstance()
+  // before ever calling runApp(), which delays the first frame Android
+  // measures for cold start / "time to initial display". runApp() now fires
+  // immediately; SharedPreferences loads behind a near-instant loading frame.
+  runApp(const _Bootstrap());
 }
 
-class SunanIbnMajahApp extends ConsumerWidget {
-  const SunanIbnMajahApp({super.key});
+/// Loads [SharedPreferences] before mounting the real app. This is fast
+/// (no large I/O), so this shows for at most a frame or two — but doing it
+/// here (instead of blocking main()) lets Flutter draw its first frame
+/// immediately, which is what fixes slow/cold app starts.
+class _Bootstrap extends StatelessWidget {
+  const _Bootstrap();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        final prefs = snapshot.data;
+        if (prefs == null) {
+          return const _BootLoading();
+        }
+        return ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          child: const sunanabudawoodApp(),
+        );
+      },
+    );
+  }
+}
+
+/// Neutral loading background shown for the brief moment before
+/// SharedPreferences resolves, avoiding a flash of white/unstyled content.
+class _BootLoading extends StatelessWidget {
+  const _BootLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: AppTheme.primaryDark,
+        body: SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+class sunanabudawoodApp extends ConsumerWidget {
+  const sunanabudawoodApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,7 +96,7 @@ class SunanIbnMajahApp extends ConsumerWidget {
     final primaryColor = AppTheme.getPrimaryColor(settings.uiColor);
 
     return MaterialApp.router(
-      title: 'Sunan Ibn Majah - Hadith',
+      title: 'Sunan Abu Dawood - Hadith',
       debugShowCheckedModeBanner: false,
       theme: settings.isDarkMode ? AppTheme.darkTheme(primaryColor) : AppTheme.lightTheme(primaryColor),
       routerConfig: goRouter,

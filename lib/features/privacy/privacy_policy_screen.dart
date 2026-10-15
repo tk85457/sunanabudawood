@@ -28,13 +28,13 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _buildSection(
               isDark,
               'Introduction',
-              'Welcome to Sunan Ibn Majah. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our application and tell you about your privacy rights.',
+              'Welcome to Sunan Abu Dawood. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our application and tell you about your privacy rights.',
             ),
 
             _buildSection(
               isDark,
               'Data Collection',
-              'We only collect the data necessary for the application to function. "Sunan Ibn Majah" stores data locally on your device for features such as bookmarks, notes, and reading progress. We do not collect or transmit personal information to our servers.',
+              'We only collect the data necessary for the application to function. "Sunan Abu Dawood" stores data locally on your device for features such as bookmarks, notes, and reading progress. We do not collect or transmit personal information to our servers.',
             ),
 
             _buildSection(
@@ -98,3 +98,4 @@ class PrivacyPolicyScreen extends StatelessWidget {
     );
   }
 }
+

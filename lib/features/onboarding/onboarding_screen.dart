@@ -17,10 +17,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _slides = const [
     _Slide(
       icon: Icons.menu_book_rounded,
-      title: 'سنن ابن ماجہ',
-      subtitle: 'Sunan Ibn Majah',
-      description: 'The most authentic collection of Hadith, compiled by Imam Ibn Majah (rahimahullah). Over 4,000+ hadiths in Arabic, Urdu & English.',
-      color: Color(0xFF1B5E20),
+      title: 'سنن ابی داؤد',
+      subtitle: 'Sunan Abu Dawood',
+      description: 'An essential collection of Hadith, compiled by Imam Abu Dawood (rahimahullah). Selected from 500,000 collected traditions.',
+      color: Color(0xFF00382E), // Branded dark green
     ),
     _Slide(
       icon: Icons.search_rounded,
@@ -117,10 +117,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                       ),
                                       child: ClipOval(
                                         child: Image.asset(
-                                          'assets/icon/icon.png',
+                                          'assets/icon/icon_circle.png',
                                           width: 160,
                                           height: 160,
-                                          fit: BoxFit.contain, // Changed to contain for perfect fit
+                                          fit: BoxFit.cover, // Full fit in circle
                                         ),
                                       ),
                                     )
@@ -288,3 +288,4 @@ class _Slide {
     required this.color,
   });
 }
+

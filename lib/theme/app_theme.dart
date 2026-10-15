@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
-  static const Color primaryGreen = Color(0xFF008080);
-  static const Color primaryDark = Color(0xFF004D40);
-  static const Color primaryLight = Color(0xFF4DB6AC);
+  static const Color primaryGreen = Color(0xFF00382E); // Very Dark Emerald Green
+  static const Color primaryDark = Color(0xFF00251E);  // Even Darker
+  static const Color primaryLight = Color(0xFF004D40); // Standard Emerald as Light
   static const Color accentGold = Color(0xFFD4A843);
   static const Color backgroundLight = Color(0xFFF4F6F8);
   static const Color backgroundDark = Color(0xFF121212);
@@ -234,12 +234,14 @@ class AppTheme {
 
   static TextStyle safeGetFont(String fontFamily, {double? fontSize, double? height, Color? color, FontWeight? fontWeight}) {
     String lookupName = fontFamily;
-    if (fontFamily == 'AlQalam' || fontFamily == 'PDMS Saleem') {
+    if (fontFamily == 'AlQalam' || fontFamily == 'PDMS Saleem' || fontFamily == 'Amiri') {
       lookupName = 'Amiri';
     } else if (fontFamily == 'Muhammadi' || fontFamily == 'NooreHira') {
       lookupName = 'Lateef';
     } else if (fontFamily == 'NooreHuda') {
       lookupName = 'Scheherazade New';
+    } else if (fontFamily == 'Noto Naskh Arabic') {
+      lookupName = 'Noto Naskh Arabic';
     } else if (fontFamily == 'Nastaleeq') {
       lookupName = 'Noto Nastaliq Urdu';
     } else if (fontFamily == 'Mehr') {

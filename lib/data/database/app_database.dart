@@ -11,14 +11,16 @@ import 'package:sqflite/sqflite.dart';
 class AppDatabase {
   static final AppDatabase instance = AppDatabase._init();
   static Database? _database;
-  static const String _dbName = 'sunan_ibn_majah.db';
-  static const int _dbVersion = 9;
+  static Future<Database>? _openCompleter;
+  static const String _dbName = 'sunan_abu_dawood.db';
+  static const int _dbVersion = 11;
 
   AppDatabase._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _openDatabase();
+    _openCompleter ??= _openDatabase();
+    _database = await _openCompleter;
     return _database!;
   }
 
@@ -121,7 +123,7 @@ class AppDatabase {
   /// Web full database initialization (loads full 26MB asset)
   Future<Database> _openWebDatabase() async {
     // We use a versioned name on web to force a clean IndexedDB copy
-    const webDbName = 'sunan_ibn_majah_web_v1.db';
+    const webDbName = 'sunan_abu_dawood_web_v1.db';
 
     // Check if DB already exists in IndexedDB
     bool exists = await databaseFactory.databaseExists(webDbName);
@@ -160,8 +162,24 @@ class AppDatabase {
     await _createIndexes(db);
   }
 
+  /// Returns true if the core data table (hadiths) exists.
+  Future<bool> _dataTablesExist(Database db) async {
+    final result = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='hadiths'",
+    );
+    return result.isNotEmpty;
+  }
+
   /// Create user-data tables (these are added on top of the pre-built asset DB)
   Future<void> _onOpen(Database db) async {
+    final tablesExist = await _dataTablesExist(db);
+    if (!tablesExist) {
+      debugPrintError(
+        'Data tables not found (asset copy may have failed). '
+        'Creating schema from scratch.',
+      );
+      await _createDataTables(db);
+    }
     await _createUserTables(db);
     await _createIndexes(db);
     await db.execute('PRAGMA foreign_keys = ON');
@@ -183,6 +201,11 @@ class AppDatabase {
     }
     if (oldVersion < 9) {
       await _migrateToV9(db);
+    }
+    if (oldVersion < 11) {
+      if (!kIsWeb) {
+        await _updateDatabaseV8(db); // Reuses the v8 logic to pull latest asset_db and replace chapters/hadiths
+      }
     }
   }
 

@@ -3,7 +3,7 @@ import '../../domain/models/models.dart';
 import '../isar/isar_service.dart';
 import '../isar/isar_models.dart';
 import '../database/app_database.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 final databaseProvider = Provider<AppDatabase>((ref) => AppDatabase.instance);
 final isarServiceProvider = Provider<IsarService>((ref) => IsarService.instance);
@@ -47,7 +47,7 @@ class HadithRepository {
     final db = await _db.database;
     final result = await db.query('hadiths',
       where: 'chapter_id = ?', whereArgs: [chapterId],
-      orderBy: 'hadith_number ASC',
+      orderBy: 'id ASC',
       limit: limit, offset: offset,
     );
     return result.map((e) => Hadith.fromMap(e)).toList();
@@ -76,9 +76,21 @@ class HadithRepository {
 
   Future<int> getHadithIndexWithinChapter(int chapterId, String hadithNumber) async {
     final db = await _db.database;
+    
+    // First get the id of the target hadith
+    final target = await db.query('hadiths', 
+      where: 'chapter_id = ? AND hadith_number = ?', 
+      whereArgs: [chapterId, hadithNumber], 
+      limit: 1
+    );
+    if (target.isEmpty) return 0;
+    
+    final targetId = target.first['id'] as int;
+
+    // Count how many hadiths in the same chapter have an id strictly less than targetId
     final result = await db.rawQuery(
-      'SELECT COUNT(*) as c FROM hadiths WHERE chapter_id = ? AND CAST(hadith_number AS FLOAT) < CAST(? AS FLOAT)',
-      [chapterId, hadithNumber]
+      'SELECT COUNT(*) as c FROM hadiths WHERE chapter_id = ? AND id < ?',
+      [chapterId, targetId]
     );
     return result.first['c'] as int;
   }
@@ -97,12 +109,7 @@ class HadithRepository {
   }
 
   Future<int> getHadithIndex(int chapterId, String hadithNumber) async {
-    final db = await _db.database;
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as c FROM hadiths WHERE chapter_id = ? AND CAST(hadith_number AS FLOAT) < CAST(? AS FLOAT)',
-      [chapterId, hadithNumber]
-    );
-    return result.first['c'] as int;
+    return getHadithIndexWithinChapter(chapterId, hadithNumber);
   }
 
   // --- Search (Optimized with Isar) ---

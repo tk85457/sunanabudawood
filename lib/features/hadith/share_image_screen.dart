@@ -122,7 +122,7 @@ class _ShareImageScreenState extends ConsumerState<ShareImageScreen> {
                   children: [
                     Icon(Icons.menu_book, color: Colors.white, size: 20),
                     SizedBox(width: 8),
-                    Text('Sunan Ibn Majah', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text('Sunan Abu Dawood', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                   ],
                 ),
                 Text('Hadith #${widget.hadith.hadithNumber}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
@@ -209,7 +209,7 @@ class _ShareImageScreenState extends ConsumerState<ShareImageScreen> {
                     Icon(Icons.verified, color: primaryColor, size: 16),
                     const SizedBox(width: 6),
                     Text(
-                      'Shared via Sunan Ibn Majah App',
+                      'Shared via Sunan Abu Dawood App',
                       style: TextStyle(
                         color: Colors.grey.shade500,
                         fontSize: 12,
@@ -236,7 +236,7 @@ class _ShareImageScreenState extends ConsumerState<ShareImageScreen> {
       if (kIsWeb) {
         // For web, use Share.shareXFiles with memory bytes
         final xFile = XFile.fromData(image, mimeType: 'image/png', name: 'hadith_${widget.hadith.hadithNumber}.png');
-        await Share.shareXFiles([xFile], text: 'Hadith #${widget.hadith.hadithNumber} from Sunan Ibn Majah');
+        await Share.shareXFiles([xFile], text: 'Hadith #${widget.hadith.hadithNumber} from Sunan Abu Dawood');
       } else {
         // For mobile/desktop, save to temp dir first
         final directory = await getTemporaryDirectory();
@@ -244,7 +244,7 @@ class _ShareImageScreenState extends ConsumerState<ShareImageScreen> {
         await imagePath.writeAsBytes(image);
 
         final xFile = XFile(imagePath.path);
-        await Share.shareXFiles([xFile], text: 'Hadith #${widget.hadith.hadithNumber} from Sunan Ibn Majah');
+        await Share.shareXFiles([xFile], text: 'Hadith #${widget.hadith.hadithNumber} from Sunan Abu Dawood');
       }
     } catch (e) {
       if (mounted) {
@@ -255,3 +255,4 @@ class _ShareImageScreenState extends ConsumerState<ShareImageScreen> {
     }
   }
 }
+

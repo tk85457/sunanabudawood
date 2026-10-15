@@ -1,5 +1,5 @@
 // Hadith data: [chapterId, hadithNumber, arabic, urdu, english]
-// Representative hadiths per chapter (authentic from Sahih Bukhari)
+// Representative hadiths per chapter (authentic from Sunan Abu Dawood)
 const hadithData = [
 // Ch1 Revelation
 [1,1,'إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى','اعمال کا دارومدار نیتوں پر ہے اور ہر شخص کو وہی ملے گا جس کی اس نے نیت کی۔','The reward of deeds depends upon the intentions and every person will get the reward according to what he has intended.'],
